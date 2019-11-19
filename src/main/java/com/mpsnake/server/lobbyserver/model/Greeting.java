@@ -1,4 +1,4 @@
-package com.mpsnake.backend.model;
+package com.mpsnake.server.lobbyserver.model;
 
 public class Greeting {
 

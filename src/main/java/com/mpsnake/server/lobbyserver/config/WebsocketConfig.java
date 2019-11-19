@@ -1,4 +1,4 @@
-package com.mpsnake.backend.config;
+package com.mpsnake.server.lobbyserver.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

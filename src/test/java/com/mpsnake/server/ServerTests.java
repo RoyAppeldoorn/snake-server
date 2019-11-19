@@ -1,10 +1,10 @@
-package com.mpsnake.backend;
+package com.mpsnake.server;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BackendApplicationTests {
+class ServerTests {
 
     @Test
     void contextLoads() {

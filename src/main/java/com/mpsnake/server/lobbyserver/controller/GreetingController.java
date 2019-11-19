@@ -1,7 +1,7 @@
-package com.mpsnake.backend.controller;
+package com.mpsnake.server.lobbyserver.controller;
 
-import com.mpsnake.backend.model.Greeting;
-import com.mpsnake.backend.model.HelloMessage;
+import com.mpsnake.server.lobbyserver.model.Greeting;
+import com.mpsnake.server.lobbyserver.model.HelloMessage;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -12,7 +12,6 @@ public class GreetingController {
     @MessageMapping("/hello")
     @SendTo("/topic/greetings")
     public Greeting greeting(HelloMessage message) throws Exception {
-        Thread.sleep(1000); // simulated delay
         return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
     }
 }

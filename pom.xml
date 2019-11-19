@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.mpsnake</groupId>
-    <artifactId>backend</artifactId>
+    <artifactId>server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>backend</name>
+    <name>server</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
