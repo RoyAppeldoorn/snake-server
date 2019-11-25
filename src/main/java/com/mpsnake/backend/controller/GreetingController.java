@@ -1,7 +1,7 @@
-package com.mpsnake.server.lobbyserver.controller;
+package com.mpsnake.backend.controller;
 
-import com.mpsnake.server.lobbyserver.model.Greeting;
-import com.mpsnake.server.lobbyserver.model.HelloMessage;
+import com.mpsnake.backend.model.Greeting;
+import com.mpsnake.backend.model.HelloMessage;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;

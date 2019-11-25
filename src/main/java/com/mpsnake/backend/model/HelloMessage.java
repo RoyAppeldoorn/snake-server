@@ -1,4 +1,4 @@
-package com.mpsnake.server.lobbyserver.model;
+package com.mpsnake.backend.model;
 
 public class HelloMessage {
     private String name;
