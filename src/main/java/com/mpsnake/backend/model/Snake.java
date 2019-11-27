@@ -1,23 +1,20 @@
 package com.mpsnake.backend.model;
 
+import org.springframework.web.socket.WebSocketSession;
+
 import java.awt.*;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 
 public class Snake {
-    public int id;
-    public String name;
-    private byte direction;
-    private Point location;
-    private int tailLength;
-    private ArrayList<Point> tail;
 
-    public Snake(String name, byte direction, Point locations) {
-        this.name = name;
-        this.direction = direction;
-        this.location = locations;
-    }
+    private static final int DEFAULT_LENGTH = 5;
 
-    public Point getLocation() {
-        return new Point(this.location);
-    }
+    private Direction direction;
+    private int length = DEFAULT_LENGTH;
+    private Location head;
+    private final Deque<Location> tail = new ArrayDeque<Location>();
+
+
 }
