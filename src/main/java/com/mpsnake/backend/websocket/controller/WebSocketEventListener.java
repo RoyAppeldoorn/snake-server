@@ -20,9 +20,5 @@ public class WebSocketEventListener {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         headerAccessor.getSessionAttributes();
         logger.info("User Disconnected");
-
-        ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setType(ChatMessage.MessageType.LEAVE);
-        messagingTemplate.convertAndSend("/topic/public", chatMessage);
     }
 }
