@@ -14,41 +14,49 @@ import org.springframework.web.socket.messaging.SessionConnectedEvent;
 
 public class Snake {
 
-    private static final int DEFAULT_LENGTH = 5;
-
     private final int id;
     private final SessionConnectedEvent session;
-
-    private Direction direction;
-    private int length = DEFAULT_LENGTH;
     private Location head;
-    private final Deque<Location> tail = new ArrayDeque<Location>();
-    private final String hexColor;
+
+    private int x;
+    private int y;
 
     public Snake(int id, SessionConnectedEvent session) {
         this.id = id;
         this.session = session;
-        this.hexColor = SnakeUtils.getRandomHexColor();
-        resetState();
+        this.head = SnakeUtils.getRandomLocation();
     }
 
-    private void resetState() {
-        this.direction = Direction.NONE;
-        this.head = SnakeUtils.getRandomLocation();
-        this.tail.clear();
-        this.length = DEFAULT_LENGTH;
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     public synchronized Location getHead() {
         return head;
     }
 
-    public synchronized Collection<Location> getTail() {
-        return tail;
-    }
-
     public int getId() {
         return id;
     }
 
+    public synchronized String getLocationsJson() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("{x: %d, y: %d}",
+                Integer.valueOf(head.getX()), Integer.valueOf(head.getY())));
+
+        return String.format("{'id':%d,'body':[%s]}",
+                Integer.valueOf(id), sb.toString());
+    }
 }

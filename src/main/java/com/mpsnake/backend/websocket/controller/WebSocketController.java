@@ -1,6 +1,8 @@
 package com.mpsnake.backend.websocket.controller;
 
 import com.mpsnake.backend.model.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -14,46 +16,22 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Controller
 public class WebSocketController {
 
-    private ArrayList<String> socketConnections;
+    private static final Log log = LogFactory.getLog(WebSocketController.class);
+
+    private static final AtomicInteger snakeIds = new AtomicInteger(1);
 
     private static Timer gameTimer = null;
-
-    private static final long TICK_DELAY = 100;
 
     private static final ConcurrentHashMap<Integer, Snake> snakes =
             new ConcurrentHashMap<Integer, Snake>();
 
-    private static final AtomicInteger snakeIds = new AtomicInteger(0);
-
-    private final int id;
-    private Snake snake;
-
-    public WebSocketController() {
-        this.id = snakeIds.getAndIncrement();
-    }
+    private static final long TICK_DELAY = 100;
 
     @MessageMapping("/update")
     @SendTo(value = "/topic/location")
-    private Location send(Location location) throws Exception {
-
-        return new Location(location.getX()+1, location.getY()+1);
-    }
-
-//    @MessageMapping("/move")
-//    @SendTo("/topic/location")
-//    public Location setDirection(Direction direction) throws Exception {
-//        return new Location(100, 20);
-//    }
-
-    public static synchronized void addSnake(Snake snake) {
-        if (snakes.size() == 0) {
-            startTimer();
-        }
-        snakes.put(Integer.valueOf(snake.getId()), snake);
-    }
-
-    public static Collection<Snake> getSnakes() {
-        return Collections.unmodifiableCollection(snakes.values());
+    public static String newPositions(String msg) throws Exception {
+        log.info(msg);
+        return msg;
     }
 
     public static void startTimer() {
@@ -62,17 +40,49 @@ public class WebSocketController {
             @Override
             public void run() {
                 try {
-                    tick();
+                    StringBuilder sb = new StringBuilder();
+                    for(Iterator<Snake> iterator = getSnakes().iterator();
+                        iterator.hasNext();) {
+                        Snake snake = iterator.next();
+                        sb.append(snake.getLocationsJson());
+                        if (iterator.hasNext()) {
+                            sb.append(',');
+                        }
+                    }
+
+                    broadcast(String.format("{'type': 'update', 'data' : [%s]}",
+                            sb.toString()));
                 } catch (Throwable e) {
-                    log.error("Caught to prevent timer from shutting down", e);
+                    log.info("Caught to prevent timer from shutting down", e);
                 }
             }
         }, TICK_DELAY, TICK_DELAY);
     }
 
+    public static void broadcast(String message) throws Exception{
+        for(Snake sn: getSnakes()) {
+            WebSocketController.newPositions(message);
+        }
+    }
+
+
+    public static synchronized void addSnake(Snake snake) {
+        if (snakes.size() == 0) {
+            startTimer();
+        }
+        snakes.put(Integer.valueOf(snake.getId()), snake);
+        log.info(snakes);
+    }
+
+    public static Collection<Snake> getSnakes() {
+        return Collections.unmodifiableCollection(snakes.values());
+    }
+
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-        this.snake = new Snake(id, event);
+        int id = snakeIds.getAndIncrement();
+        Snake snake = new Snake(id, event);
+        log.info(snake.getId());
         addSnake(snake);
     }
 }
