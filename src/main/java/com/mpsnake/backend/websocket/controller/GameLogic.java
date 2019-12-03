@@ -3,9 +3,12 @@ package com.mpsnake.backend.websocket.controller;
 import com.mpsnake.backend.model.Snake;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,20 +17,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 public class GameLogic {
 
-    private final Log log = LogFactory.getLog(GameLogic.class);
+    private static final Log log = LogFactory.getLog(GameLogic.class);
 
-    private final AtomicInteger snakeIds = new AtomicInteger(1);
+    public static final AtomicInteger snakeIds = new AtomicInteger(1);
 
-    private Timer gameTimer = null;
+    private static Timer gameTimer = null;
 
-    private final ConcurrentHashMap<Integer, Snake> snakes =
+    private static final ConcurrentHashMap<Integer, Snake> snakes =
             new ConcurrentHashMap<Integer, Snake>();
 
-    private final long TICK_DELAY = 100;
+    private static final long TICK_DELAY = 16;
 
-    private final WebSocketController wc = new WebSocketController();
+    @Autowired
+    private static SimpMessageSendingOperations messageTemplate;
 
-    public void startTimer() {
+    private static void startTimer() {
         gameTimer = new Timer(GameLogic.class.getSimpleName() + " Timer");
         gameTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -43,7 +47,7 @@ public class GameLogic {
                         }
                     }
 
-                    broadcast(String.format("{'type': 'update', 'data' : [%s]}",
+                    broadcast(String.format("{\"type\": \"update\", \"data\" : [%s]}",
                             sb.toString()));
                 } catch (Throwable e) {
                     log.info("Caught to prevent timer from shutting down", e);
@@ -52,7 +56,14 @@ public class GameLogic {
         }, TICK_DELAY, TICK_DELAY);
     }
 
-    public synchronized void addSnake(Snake snake) {
+    private static void stopTimer() {
+        if (gameTimer != null) {
+            gameTimer.cancel();
+        }
+    }
+
+    public static synchronized void addSnake(Snake snake) {
+        log.info(snakes.size());
         if (snakes.size() == 0) {
             startTimer();
         }
@@ -60,21 +71,28 @@ public class GameLogic {
         log.info(snakes);
     }
 
-    public Collection<Snake> getSnakes() {
+    public static synchronized void removeSnake(Snake snake) {
+        snakes.remove(Integer.valueOf(snake.getId()));
+        if(snakes.size() == 0) {
+            stopTimer();
+        }
+    }
+
+    public static Collection<Snake> getSnakes() {
         return Collections.unmodifiableCollection(snakes.values());
     }
 
-    public void broadcast(String message) throws Exception{
+    public static void broadcast(String message) throws Exception{
         for(Snake sn: getSnakes()) {
-            wc.newPositions(message);
+            log.info(message);
+            messageTemplate.convertAndSend("/topic/location", message);
         }
     }
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-        int id = snakeIds.getAndIncrement();
+        int id = GameLogic.snakeIds.getAndIncrement();
         Snake snake = new Snake(id, event);
-        log.info(snake.getId());
-        addSnake(snake);
+        GameLogic.addSnake(snake);
     }
 }
