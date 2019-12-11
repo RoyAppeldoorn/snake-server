@@ -1,43 +1,49 @@
 package com.mpsnake.backend.model;
 
-import org.springframework.web.socket.WebSocketSession;
 import com.mpsnake.backend.utils.SnakeUtils;
-
-import java.awt.*;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Deque;
-
-import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.messaging.SessionConnectedEvent;
 
 public class Snake {
 
-    private final int id;
-    private final SessionConnectedEvent session;
+    private final String id;
     private Location head;
+    private final String hexColor;
+    private String username;
 
-    public Snake(int id, SessionConnectedEvent session) {
+    public Snake(String id, String username) {
         this.id = id;
-        this.session = session;
+        this.username = username;
         this.head = SnakeUtils.getRandomLocation();
+        this.hexColor = SnakeUtils.getRandomHexColor();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getHexColor() {
+        return hexColor;
     }
 
     public synchronized Location getHead() {
         return head;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public synchronized String getLocationsJson() {
+    public synchronized String getLocationJson() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("{\"x\": %d, \"y\": %d}",
-                Integer.valueOf(head.getX()), Integer.valueOf(head.getY())));
+                head.getX(), head.getY()));
 
-        return String.format("{\"id\":%d,\"body\":[%s]}",
-                Integer.valueOf(id), sb.toString());
+        return String.format("{\"id\":\"%s\",\"body\":[%s]}",
+                String.valueOf(id), sb.toString());
     }
+
+
 }

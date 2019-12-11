@@ -1,24 +1,38 @@
 package com.mpsnake.backend.websocket.controller;
 
-import com.mpsnake.backend.model.Snake;
-import org.slf4j.LoggerFactory;
+import com.mpsnake.backend.logic.GameLogic;
+import com.mpsnake.backend.logic.IGameLogic;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
+import org.springframework.messaging.simp.SimpAttributesContextHolder;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import java.util.logging.Logger;
-
+@Component
 public class WebSocketEventListener {
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(WebSocketEventListener.class);
 
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
 
+    @Autowired
+    private IGameLogic gameLogic;
+
+    private final Log log = LogFactory.getLog(WebSocketEventListener.class);
+
+    @EventListener
+    public void handleWebSocketConnectListener(SessionConnectedEvent event) throws Exception {
+        // get session id
+        String sessionId = SimpAttributesContextHolder.currentAttributes().getSessionId();
+        gameLogic.addSnake(sessionId);
+    }
+
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
-
+        String sessionId = event.getSessionId();
+        gameLogic.removeSnake(sessionId);
     }
 }
