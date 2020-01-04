@@ -1,6 +1,6 @@
 package com.mpsnake.backend.model;
 
-import com.mpsnake.backend.utils.SnakeUtils;
+import com.mpsnake.backend.logic.utils.SnakeUtils;
 
 public class Snake {
 

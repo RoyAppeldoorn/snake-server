@@ -1,4 +1,4 @@
-package com.mpsnake.backend.utils;
+package com.mpsnake.backend.logic.utils;
 
 import com.mpsnake.backend.model.Location;
 
