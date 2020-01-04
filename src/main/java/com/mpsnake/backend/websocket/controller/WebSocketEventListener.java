@@ -25,9 +25,7 @@ public class WebSocketEventListener {
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) throws Exception {
-        // get session id
-        String sessionId = SimpAttributesContextHolder.currentAttributes().getSessionId();
-        gameLogic.addSnake(sessionId);
+        log.info("Succesfull connection");
     }
 
     @EventListener
