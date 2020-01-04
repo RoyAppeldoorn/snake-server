@@ -1,8 +1,10 @@
 package com.mpsnake.backend.logic;
 
+import com.mpsnake.backend.model.Snake;
+
 public interface IGameLogic {
 
-    void addSnake(String id);
+    void addSnake(Snake snake);
 
     void removeSnake(String id);
 }

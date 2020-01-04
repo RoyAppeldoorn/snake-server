@@ -20,7 +20,7 @@ public class GameLogic implements IGameLogic {
     private final ConcurrentHashMap<String, Snake> snakes =
             new ConcurrentHashMap<String, Snake>();
 
-    private final long TICK_DELAY = 5000;
+    private final long TICK_DELAY = 3000;
 
     @Autowired
     private SimpMessageSendingOperations messageTemplate;
@@ -29,12 +29,11 @@ public class GameLogic implements IGameLogic {
         return Collections.unmodifiableCollection(snakes.values());
     }
 
-    public synchronized void addSnake(String id) {
+    public synchronized void addSnake(Snake snake) {
         if (snakes.size() == 0) {
             startTimer();
         }
 
-        Snake snake = new Snake(id, " ");
         snakes.put(String.valueOf(snake.getId()), snake);
         try {
             addSnakeBroadcast();
@@ -80,6 +79,8 @@ public class GameLogic implements IGameLogic {
         for(Iterator<Snake> iterator = getSnakes().iterator();
             iterator.hasNext();) {
             Snake snake = iterator.next();
+            snake.getHead().setY(snake.getHead().getY() + 10);
+            snake.getHead().setX(snake.getHead().getX() + 10);
             sb.append(snake.getLocationJson());
             if (iterator.hasNext()) {
                 sb.append(',');
@@ -101,7 +102,6 @@ public class GameLogic implements IGameLogic {
                 sbAddSnake.append(',');
             }
         }
-        
         broadcast(String.format("{\"type\": \"join\", \"data\" : [%s]}",
                 sbAddSnake.toString()));
     }
@@ -113,6 +113,6 @@ public class GameLogic implements IGameLogic {
 
     private void broadcast(String message) throws Exception {
         log.info(message);
-        messageTemplate.convertAndSend("/topic/location", message);
+        messageTemplate.convertAndSend("/topic/public", message);
     }
 }
