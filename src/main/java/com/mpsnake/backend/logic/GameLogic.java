@@ -1,5 +1,6 @@
 package com.mpsnake.backend.logic;
 
+import com.mpsnake.backend.model.Direction;
 import com.mpsnake.backend.model.Snake;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,7 +21,7 @@ public class GameLogic implements IGameLogic {
     private final ConcurrentHashMap<String, Snake> snakes =
             new ConcurrentHashMap<String, Snake>();
 
-    private final long TICK_DELAY = 3000;
+    private final long TICK_DELAY = 300;
 
     @Autowired
     private SimpMessageSendingOperations messageTemplate;
@@ -54,6 +55,11 @@ public class GameLogic implements IGameLogic {
         }
     }
 
+    public synchronized void setDirection(String id, Direction direction) {
+        Snake snake = snakes.get(id);
+        snake.setDirection(direction);
+    }
+
     private void startTimer() {
         gameTimer = new Timer(GameLogic.class.getSimpleName() + " Timer");
         gameTimer.scheduleAtFixedRate(new TimerTask() {
@@ -79,8 +85,7 @@ public class GameLogic implements IGameLogic {
         for(Iterator<Snake> iterator = getSnakes().iterator();
             iterator.hasNext();) {
             Snake snake = iterator.next();
-            snake.getHead().setY(snake.getHead().getY() + 10);
-            snake.getHead().setX(snake.getHead().getX() + 10);
+            snake.update(getSnakes());
             sb.append(snake.getLocationJson());
             if (iterator.hasNext()) {
                 sb.append(',');
