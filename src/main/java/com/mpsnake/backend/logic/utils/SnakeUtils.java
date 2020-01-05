@@ -6,9 +6,6 @@ import java.awt.*;
 import java.util.Random;
 
 public class SnakeUtils {
-    public static final int PLAYFIELD_WIDTH = 640;
-    public static final int PLAYFIELD_HEIGHT = 480;
-    public static final int GRID_SIZE = 10;
 
     private static final Random random = new Random();
 
@@ -23,16 +20,5 @@ public class SnakeUtils {
     }
 
 
-    public static Location getRandomLocation() {
-        int x = roundByGridSize(random.nextInt(PLAYFIELD_WIDTH));
-        int y = roundByGridSize(random.nextInt(PLAYFIELD_HEIGHT));
-        return new Location(x, y);
-    }
 
-    private static int roundByGridSize(int value) {
-        value = value + (GRID_SIZE / 2);
-        value = value / GRID_SIZE;
-        value = value * GRID_SIZE;
-        return value;
-    }
 }
