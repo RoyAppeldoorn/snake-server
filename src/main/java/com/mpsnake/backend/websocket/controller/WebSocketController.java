@@ -1,6 +1,7 @@
 package com.mpsnake.backend.websocket.controller;
 
 import com.mpsnake.backend.logic.IGameLogic;
+import com.mpsnake.backend.model.Direction;
 import com.mpsnake.backend.model.Snake;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,5 +31,18 @@ public class WebSocketController {
         String sessionId = SimpAttributesContextHolder.currentAttributes().getSessionId();
         Snake newSnake = new Snake(sessionId, username);
         gameLogic.addSnake(newSnake);
+    }
+
+    @MessageMapping("/setDirection")
+    public void handleDirectionChange(String dir) throws Exception {
+        String sessionId = SimpAttributesContextHolder.currentAttributes().getSessionId();
+        log.info(dir);
+        try {
+            Direction direction = Direction.valueOf(Direction.class, dir.trim());
+            gameLogic.setDirection(sessionId, direction);
+        } catch(Exception ex) {
+            ex.printStackTrace();
+            log.warn(ex);
+        }
     }
 }

@@ -1,19 +1,101 @@
 package com.mpsnake.backend.model;
 
 import com.mpsnake.backend.logic.utils.SnakeUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Deque;
 
 public class Snake {
 
-    private final String id;
+    @Autowired
+    private SimpMessageSendingOperations messageTemplate;
+
+    private static final int DEFAULT_LENGTH = 5;
+
+    private Direction direction;
+    private int length = DEFAULT_LENGTH;
     private Location head;
+    private final Deque<Location> tail = new ArrayDeque<Location>();
+
+    private final String id;
     private final String hexColor;
     private String username;
 
     public Snake(String id, String username) {
         this.id = id;
         this.username = username;
-        this.head = SnakeUtils.getRandomLocation();
         this.hexColor = SnakeUtils.getRandomHexColor();
+        resetState();
+    }
+
+    private void resetState() {
+        this.direction = Direction.NONE;
+        this.head = Location.getRandomLocation();
+        this.tail.clear();
+        this.length = DEFAULT_LENGTH;
+    }
+
+    public synchronized void update(Collection<Snake> snakes) throws Exception {
+        Location nextLocation = head.getAdjacentLocation(direction);
+        if (nextLocation.x >= Location.PLAYFIELD_WIDTH) {
+            nextLocation.x = 0;
+        }
+        if (nextLocation.y >= Location.PLAYFIELD_HEIGHT) {
+            nextLocation.y = 0;
+        }
+        if (nextLocation.x < 0) {
+            nextLocation.x = Location.PLAYFIELD_WIDTH;
+        }
+        if (nextLocation.y < 0) {
+            nextLocation.y = Location.PLAYFIELD_HEIGHT;
+        }
+        if (direction != Direction.NONE) {
+            tail.addFirst(head);
+            head = nextLocation;
+        }
+
+        handleCollisions(snakes);
+    }
+
+    private void handleCollisions(Collection<Snake> snakes) throws Exception {
+        for (Snake snake : snakes) {
+            boolean headCollision = id != snake.id && snake.getHead().equals(head);
+            boolean tailCollision = snake.getTail().contains(head);
+            if (headCollision || tailCollision) {
+                kill();
+                if (id != snake.id) {
+                    snake.reward();
+                }
+            }
+        }
+    }
+
+    private synchronized void kill() {
+        resetState();
+//        String message = "{'type': 'dead'}";
+//        messageTemplate.convertAndSend("topic/public", message);
+    }
+
+    private synchronized void reward() throws Exception {
+        length++;
+//        String message = "{'type': 'kill'}";
+//        messageTemplate.convertAndSend("topic/public", message);
+    }
+
+    public synchronized String getLocationJson() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("{\"x\": %d, \"y\": %d}",
+                Integer.valueOf(head.x), Integer.valueOf(head.y)));
+        for (Location location : tail) {
+            sb.append(',');
+            sb.append(String.format("{\"x\": %d, \"y\": %d}",
+                    Integer.valueOf(location.x), Integer.valueOf(location.y)));
+        }
+        return String.format("{\"id\":\"%s\",\"body\":[%s]}",
+                String.valueOf(id), sb.toString());
     }
 
     public String getId() {
@@ -36,14 +118,11 @@ public class Snake {
         return head;
     }
 
-    public synchronized String getLocationJson() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("{\"x\": %d, \"y\": %d}",
-                head.getX(), head.getY()));
-
-        return String.format("{\"id\":\"%s\",\"body\":[%s]}",
-                String.valueOf(id), sb.toString());
+    public synchronized Collection<Location> getTail() {
+        return tail;
     }
 
-
+    public synchronized void setDirection(Direction direction) {
+        this.direction = direction;
+    }
 }
