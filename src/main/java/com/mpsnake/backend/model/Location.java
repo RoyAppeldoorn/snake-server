@@ -5,8 +5,8 @@ import java.util.Random;
 
 public class Location {
     public static final int GRID_SIZE = 20;
-    public static final int PLAYFIELD_WIDTH = 640;
-    public static final int PLAYFIELD_HEIGHT = 480;
+    public static final int PLAYFIELD_WIDTH = 1100;
+    public static final int PLAYFIELD_HEIGHT = 900;
 
     private static final Random random = new Random();
 
