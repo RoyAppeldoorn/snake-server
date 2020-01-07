@@ -21,7 +21,7 @@ public class GameLogic implements IGameLogic {
     private final ConcurrentHashMap<String, Snake> snakes =
             new ConcurrentHashMap<String, Snake>();
 
-    private final long TICK_DELAY = 300;
+    private final long TICK_DELAY = 200;
 
     @Autowired
     private SimpMessageSendingOperations messageTemplate;
