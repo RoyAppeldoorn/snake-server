@@ -36,7 +36,7 @@ public class WebSocketController {
     @MessageMapping("/setDirection")
     public void handleDirectionChange(String dir) throws Exception {
         String sessionId = SimpAttributesContextHolder.currentAttributes().getSessionId();
-        log.info(dir);
+        log.info("Player with session id: " + sessionId + " changed its direction to: " + dir);
         try {
             Direction direction = Direction.valueOf(Direction.class, dir.trim());
             gameLogic.setDirection(sessionId, direction);

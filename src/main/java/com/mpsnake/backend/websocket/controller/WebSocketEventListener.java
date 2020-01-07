@@ -25,7 +25,7 @@ public class WebSocketEventListener {
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) throws Exception {
-        log.info("Succesfull connection");
+        log.info("Successful connection");
     }
 
     @EventListener
