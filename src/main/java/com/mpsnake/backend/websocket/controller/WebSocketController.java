@@ -1,6 +1,6 @@
 package com.mpsnake.backend.websocket.controller;
 
-import com.mpsnake.backend.logic.IGameLogic;
+import com.mpsnake.backend.interfaces.IGameLogic;
 import com.mpsnake.backend.model.Direction;
 import com.mpsnake.backend.model.Snake;
 import org.apache.commons.logging.Log;
@@ -21,7 +21,7 @@ public class WebSocketController {
 
     @MessageMapping("/update")
     @SendTo(value = "/topic/public")
-    public String newPositions(String msg) throws Exception {
+    public String broadcast(String msg) throws Exception {
         return msg;
     }
 
