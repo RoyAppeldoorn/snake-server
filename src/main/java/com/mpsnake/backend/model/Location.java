@@ -1,13 +1,11 @@
 package com.mpsnake.backend.model;
 
+import com.mpsnake.backend.utils.Playfield;
+
 import java.util.Objects;
 import java.util.Random;
 
 public class Location {
-    public static final int GRID_SIZE = 20;
-    public static final int PLAYFIELD_WIDTH = 1100;
-    public static final int PLAYFIELD_HEIGHT = 900;
-
     private static final Random random = new Random();
 
     public int x;
@@ -18,32 +16,16 @@ public class Location {
         this.y = y;
     }
 
-//    public int getX() {
-//        return x;
-//    }
-//
-//    public void setX(int x) {
-//        this.x = x;
-//    }
-//
-//    public int getY() {
-//        return y;
-//    }
-//
-//    public void setY(int y) {
-//        this.y = y;
-//    }
-
     public Location getAdjacentLocation(Direction direction) {
         switch (direction) {
             case NORTH:
-                return new Location(x, y - GRID_SIZE);
+                return new Location(x, y - Playfield.getGridSize());
             case SOUTH:
-                return new Location(x, y + GRID_SIZE);
+                return new Location(x, y + Playfield.getGridSize());
             case EAST:
-                return new Location(x + GRID_SIZE, y);
+                return new Location(x + Playfield.getGridSize(), y);
             case WEST:
-                return new Location(x - GRID_SIZE, y);
+                return new Location(x - Playfield.getGridSize(), y);
             case NONE:
                 // fall through
             default:
@@ -52,15 +34,15 @@ public class Location {
     }
 
     public static Location getRandomLocation() {
-        int x = roundByGridSize(random.nextInt(PLAYFIELD_WIDTH));
-        int y = roundByGridSize(random.nextInt(PLAYFIELD_HEIGHT));
+        int x = roundByGridSize(random.nextInt(Playfield.getPlayFieldWidth()));
+        int y = roundByGridSize(random.nextInt(Playfield.getPlayFieldHeight()));
         return new Location(x, y);
     }
 
     private static int roundByGridSize(int value) {
-        value = value + (GRID_SIZE / 2);
-        value = value / GRID_SIZE;
-        value = value * GRID_SIZE;
+        value = value + (Playfield.getGridSize() / 2);
+        value = value / Playfield.getGridSize();
+        value = value * Playfield.getGridSize();
         return value;
     }
 

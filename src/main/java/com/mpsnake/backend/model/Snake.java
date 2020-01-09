@@ -1,17 +1,13 @@
 package com.mpsnake.backend.model;
 
-import com.mpsnake.backend.logic.utils.SnakeUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import com.mpsnake.backend.utils.Playfield;
+import com.mpsnake.backend.utils.RandomColorGenerator;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
 
 public class Snake {
-
-    @Autowired
-    private SimpMessageSendingOperations messageTemplate;
 
     private static final int DEFAULT_LENGTH = 5;
 
@@ -27,7 +23,7 @@ public class Snake {
     public Snake(String id, String username) {
         this.id = id;
         this.username = username;
-        this.hexColor = SnakeUtils.getRandomHexColor();
+        this.hexColor = RandomColorGenerator.getRandomHexColor();
         resetState();
     }
 
@@ -40,17 +36,17 @@ public class Snake {
 
     public synchronized void update(Collection<Snake> snakes) throws Exception {
         Location nextLocation = head.getAdjacentLocation(direction);
-        if (nextLocation.x >= Location.PLAYFIELD_WIDTH) {
+        if (nextLocation.x >= Playfield.getPlayFieldWidth()) {
             nextLocation.x = 0;
         }
-        if (nextLocation.y >= Location.PLAYFIELD_HEIGHT) {
+        if (nextLocation.y >= Playfield.getPlayFieldHeight()) {
             nextLocation.y = 0;
         }
         if (nextLocation.x < 0) {
-            nextLocation.x = Location.PLAYFIELD_WIDTH;
+            nextLocation.x = Playfield.getPlayFieldWidth();
         }
         if (nextLocation.y < 0) {
-            nextLocation.y = Location.PLAYFIELD_HEIGHT;
+            nextLocation.y = Playfield.getPlayFieldHeight();
         }
         if (direction != Direction.NONE) {
             tail.addFirst(head);
