@@ -1,4 +1,4 @@
-package com.mpsnake.backend.logic;
+package com.mpsnake.backend.interfaces;
 
 import com.mpsnake.backend.model.Direction;
 import com.mpsnake.backend.model.Snake;

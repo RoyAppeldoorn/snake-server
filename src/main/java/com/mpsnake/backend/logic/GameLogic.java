@@ -1,5 +1,6 @@
 package com.mpsnake.backend.logic;
 
+import com.mpsnake.backend.interfaces.IGameLogic;
 import com.mpsnake.backend.model.Direction;
 import com.mpsnake.backend.model.Snake;
 import org.apache.commons.logging.Log;

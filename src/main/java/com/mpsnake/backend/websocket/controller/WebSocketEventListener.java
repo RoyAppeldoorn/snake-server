@@ -1,12 +1,10 @@
 package com.mpsnake.backend.websocket.controller;
 
-import com.mpsnake.backend.logic.GameLogic;
-import com.mpsnake.backend.logic.IGameLogic;
+import com.mpsnake.backend.interfaces.IGameLogic;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
-import org.springframework.messaging.simp.SimpAttributesContextHolder;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
