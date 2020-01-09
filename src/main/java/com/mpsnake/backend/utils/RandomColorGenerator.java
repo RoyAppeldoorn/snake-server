@@ -1,11 +1,9 @@
-package com.mpsnake.backend.logic.utils;
-
-import com.mpsnake.backend.model.Location;
+package com.mpsnake.backend.utils;
 
 import java.awt.*;
 import java.util.Random;
 
-public class SnakeUtils {
+public class RandomColorGenerator {
 
     private static final Random random = new Random();
 
@@ -18,7 +16,5 @@ public class SnakeUtils {
         return '#' + Integer.toHexString(
                 (color.getRGB() & 0xffffff) | 0x1000000).substring(1);
     }
-
-
 
 }
