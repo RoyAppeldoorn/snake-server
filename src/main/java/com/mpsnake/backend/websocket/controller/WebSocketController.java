@@ -1,8 +1,8 @@
 package com.mpsnake.backend.websocket.controller;
 
 import com.mpsnake.backend.interfaces.IGameLogic;
-import com.mpsnake.backend.model.Direction;
-import com.mpsnake.backend.model.Snake;
+import com.mpsnake.backend.models.Direction;
+import com.mpsnake.backend.models.Snake;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,35 +14,34 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class WebSocketController {
 
-    private static final Log log = LogFactory.getLog(WebSocketController.class);
+    private final Log log = LogFactory.getLog(WebSocketController.class);
 
     @Autowired
     private IGameLogic gameLogic;
 
     @MessageMapping("/update")
     @SendTo(value = "/topic/public")
-    public String broadcast(String msg) throws Exception {
+    public String broadcast(String msg) {
         return msg;
     }
 
     @MessageMapping("/addUser")
     @SendTo(value = "/topic/public")
-    public void addUser(String username) throws Exception {
+    public void addUser(String username) {
         String sessionId = SimpAttributesContextHolder.currentAttributes().getSessionId();
         Snake newSnake = new Snake(sessionId, username);
         gameLogic.addSnake(newSnake);
     }
 
     @MessageMapping("/setDirection")
-    public void handleDirectionChange(String dir) throws Exception {
+    public void handleDirectionChange(String dir) {
         String sessionId = SimpAttributesContextHolder.currentAttributes().getSessionId();
         log.info("Player with session id: " + sessionId + " changed its direction to: " + dir);
         try {
-            Direction direction = Direction.valueOf(Direction.class, dir.trim());
+            Direction direction = Direction.valueOf(Direction.class, dir);
             gameLogic.setDirection(sessionId, direction);
         } catch(Exception ex) {
-            ex.printStackTrace();
-            log.warn(ex);
+            log.error(ex);
         }
     }
 }

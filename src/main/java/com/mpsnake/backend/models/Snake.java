@@ -1,6 +1,7 @@
-package com.mpsnake.backend.model;
+package com.mpsnake.backend.models;
 
-import com.mpsnake.backend.utils.Playfield;
+import com.mpsnake.backend.utils.LocationUtils;
+import com.mpsnake.backend.utils.PlayfieldUtils;
 import com.mpsnake.backend.utils.RandomColorGenerator;
 
 import java.util.ArrayDeque;
@@ -9,12 +10,9 @@ import java.util.Deque;
 
 public class Snake {
 
-    private static final int DEFAULT_LENGTH = 5;
-
     private Direction direction;
-    private int length = DEFAULT_LENGTH;
     private Location head;
-    private final Deque<Location> tail = new ArrayDeque<Location>();
+    private final Deque<Location> tail;
 
     private final String id;
     private final String hexColor;
@@ -24,29 +22,29 @@ public class Snake {
         this.id = id;
         this.username = username;
         this.hexColor = RandomColorGenerator.getRandomHexColor();
+        this.tail = new ArrayDeque<Location>();
         resetState();
     }
 
     private void resetState() {
         this.direction = Direction.NONE;
-        this.head = Location.getRandomLocation();
+        this.head = LocationUtils.getRandomLocation();
         this.tail.clear();
-        this.length = DEFAULT_LENGTH;
     }
 
     public synchronized void update(Collection<Snake> snakes) throws Exception {
         Location nextLocation = head.getAdjacentLocation(direction);
-        if (nextLocation.x >= Playfield.getPlayFieldWidth()) {
+        if (nextLocation.x >= PlayfieldUtils.getPlayFieldWidth()) {
             nextLocation.x = 0;
         }
-        if (nextLocation.y >= Playfield.getPlayFieldHeight()) {
+        if (nextLocation.y >= PlayfieldUtils.getPlayFieldHeight()) {
             nextLocation.y = 0;
         }
         if (nextLocation.x < 0) {
-            nextLocation.x = Playfield.getPlayFieldWidth();
+            nextLocation.x = PlayfieldUtils.getPlayFieldWidth();
         }
         if (nextLocation.y < 0) {
-            nextLocation.y = Playfield.getPlayFieldHeight();
+            nextLocation.y = PlayfieldUtils.getPlayFieldHeight();
         }
         if (direction != Direction.NONE) {
             tail.addFirst(head);
@@ -76,7 +74,6 @@ public class Snake {
     }
 
     private synchronized void reward() throws Exception {
-        length++;
 //        String message = "{'type': 'kill'}";
 //        messageTemplate.convertAndSend("topic/public", message);
     }

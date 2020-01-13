@@ -1,6 +1,6 @@
 package com.mpsnake.backend.utils;
 
-public class Playfield {
+public class PlayfieldUtils {
     private static final int GRID_SIZE = 20;
     private static final int PLAYFIELD_WIDTH = 1100;
     private static final int PLAYFIELD_HEIGHT = 900;

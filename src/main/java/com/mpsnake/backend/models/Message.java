@@ -1,4 +1,4 @@
-package com.mpsnake.backend.model;
+package com.mpsnake.backend.models;
 
 public class Message {
     private MessageType type;
@@ -8,7 +8,9 @@ public class Message {
     public enum MessageType {
         JOIN,
         UPDATE,
-        LEAVE
+        LEAVE,
+        KILL,
+        DEAD
     }
 
     public MessageType getType() {

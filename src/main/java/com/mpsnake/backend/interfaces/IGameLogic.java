@@ -1,7 +1,7 @@
 package com.mpsnake.backend.interfaces;
 
-import com.mpsnake.backend.model.Direction;
-import com.mpsnake.backend.model.Snake;
+import com.mpsnake.backend.models.Direction;
+import com.mpsnake.backend.models.Snake;
 
 public interface IGameLogic {
 

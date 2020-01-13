@@ -1,8 +1,8 @@
 package com.mpsnake.backend.logic;
 
 import com.mpsnake.backend.interfaces.IGameLogic;
-import com.mpsnake.backend.model.Direction;
-import com.mpsnake.backend.model.Snake;
+import com.mpsnake.backend.models.Direction;
+import com.mpsnake.backend.models.Snake;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +37,7 @@ public class GameLogic implements IGameLogic {
         }
 
         snakes.put(String.valueOf(snake.getId()), snake);
-        try {
-            addSnakeBroadcast();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        addSnakeBroadcast();
     }
 
     public synchronized void removeSnake(String id) {
@@ -49,11 +45,7 @@ public class GameLogic implements IGameLogic {
         if(snakes.size() == 0) {
             stopTimer();
         }
-        try {
-            removeSnakeBroadcast(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        removeSnakeBroadcast(id);
     }
 
     public synchronized void setDirection(String id, Direction direction) {
@@ -97,7 +89,7 @@ public class GameLogic implements IGameLogic {
                 sb.toString()));
     }
 
-    private void addSnakeBroadcast() throws Exception {
+    private void addSnakeBroadcast() {
         StringBuilder sbAddSnake = new StringBuilder();
         for(Iterator<Snake> iterator = getSnakes().iterator();
             iterator.hasNext();) {
@@ -112,12 +104,12 @@ public class GameLogic implements IGameLogic {
                 sbAddSnake.toString()));
     }
 
-    private void removeSnakeBroadcast(String id) throws Exception {
+    private void removeSnakeBroadcast(String id) {
         broadcast(String.format("{\"type\": \"leave\", \"id\" : \"%s\"}",
                 String.valueOf(id)));
     }
 
-    private void broadcast(String message) throws Exception {
+    private void broadcast(String message) {
         log.info(message);
         messageTemplate.convertAndSend("/topic/public", message);
     }
