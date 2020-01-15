@@ -1,12 +1,8 @@
 # Travis CI Java documentation can be found in:
 # https://docs.travis-ci.com/user/languages/java/
 
-# This enables the 'defaults' to test java applications:
 language: java
 
-# We can specify a list of JDKs to be used for testing
-# A list of available JDKs in Trusty can be seed in:
-# https://docs.travis-ci.com/user/reference/trusty/#jvm-clojure-groovy-java-scala-images
 jdk:
  - oraclejdk11
  
@@ -20,23 +16,14 @@ addons:
  sonarcloud:
   organization: "royappeldoorn1122" # the key of the org you chose at step #3
   token:
-   secure: "0d1d65afbbb2627e4c4b244ace344b90cd2b998a" # encrypted value of your token
+   secure: "14e775424ee060be719f6e7df748fb3b12185393" # encrypted value of your token
 
 install:
  - "mvn -N io.takari:maven:wrapper -Dmaven=${MAVEN_VERSION}"
  - "./mvnw --show-version --errors --batch-mode test-compile dependency:go-offline"
- -
+
 script:
  # other script steps might be done before running the actual analysis
  - "./mvnw --show-version --errors --batch-mode -Prun-its clean verify"
- - mvn clean verify sonar:sonar -Pcoverage -Dsonar.projectKey=royappeldoorn1122
+ - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=RoyAppeldoorn_snake-server
 
-# script:
-# - bundle exec rake test
-
-# Each job in Travis CI has several steps:
-# https://docs.travis-ci.com/user/job-lifecycle/
-# The 'language: java' directive sets up sane defaults to test common java applications
-# We use the defaults for installing dependencies, compiling and testing maven applications
-# In our case it will be 'mvn install' followed by 'mvn test'
-# mvn install and mvn test get executed automatically since we have a .pom file
