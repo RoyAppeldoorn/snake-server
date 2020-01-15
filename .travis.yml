@@ -23,5 +23,5 @@ install:
 script:
  # other script steps might be done before running the actual analysis
  - "./mvnw --show-version --errors --batch-mode -Prun-its clean verify"
- - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=RoyAppeldoorn_snake-server
+ - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Pcoverage -Dsonar.projectKey=RoyAppeldoorn_snake-server
 
