@@ -18,10 +18,10 @@ addons:
 
 install:
  - "mvn -N io.takari:maven:wrapper -Dmaven=${MAVEN_VERSION}"
- - "./mvnw --show-version --errors --batch-mode test-compile dependency:go-offline"
+# - "./mvnw --show-version --errors --batch-mode test-compile dependency:go-offline"
 
 script:
  # other script steps might be done before running the actual analysis
  - "./mvnw --show-version --errors --batch-mode -Prun-its clean verify"
- - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Pcoverage -Dsonar.projectKey=RoyAppeldoorn_snake-server
+ - mvn clean install sonar:sonar -Pcoverage -Dsonar.projectKey=RoyAppeldoorn_snake-server
 
