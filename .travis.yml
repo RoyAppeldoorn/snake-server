@@ -21,8 +21,14 @@ addons:
   organization: "royappeldoorn1122" # the key of the org you chose at step #3
   token:
    secure: "0d1d65afbbb2627e4c4b244ace344b90cd2b998a" # encrypted value of your token
+
+install:
+ - "mvn -N io.takari:maven:wrapper -Dmaven=${MAVEN_VERSION}"
+ - "./mvnw --show-version --errors --batch-mode test-compile dependency:go-offline"
+ -
 script:
  # other script steps might be done before running the actual analysis
+ - "./mvnw --show-version --errors --batch-mode -Prun-its clean verify"
  - mvn clean verify sonar:sonar -Pcoverage -Dsonar.projectKey=royappeldoorn1122
 
 # script:
