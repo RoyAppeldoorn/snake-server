@@ -15,8 +15,6 @@ env:
 addons:
  sonarcloud:
   organization: "royappeldoorn1122" # the key of the org you chose at step #3
-  token:
-   secure: "14e775424ee060be719f6e7df748fb3b12185393" # encrypted value of your token
 
 install:
  - "mvn -N io.takari:maven:wrapper -Dmaven=${MAVEN_VERSION}"
