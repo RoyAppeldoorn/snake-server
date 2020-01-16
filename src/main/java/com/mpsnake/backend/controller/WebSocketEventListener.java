@@ -1,4 +1,4 @@
-package com.mpsnake.backend.websocket.controller;
+package com.mpsnake.backend.controller;
 
 import com.mpsnake.backend.interfaces.IGameLogic;
 import org.apache.commons.logging.Log;

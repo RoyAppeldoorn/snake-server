@@ -1,4 +1,4 @@
-package com.mpsnake.backend.websocket.controller;
+package com.mpsnake.backend.controller;
 
 import com.mpsnake.backend.interfaces.IGameLogic;
 import com.mpsnake.backend.models.Direction;
@@ -12,9 +12,9 @@ import org.springframework.messaging.simp.SimpAttributesContextHolder;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class WebSocketController {
+public class GameController {
 
-    private final Log log = LogFactory.getLog(WebSocketController.class);
+    private final Log log = LogFactory.getLog(GameController.class);
 
     @Autowired
     private IGameLogic gameLogic;
