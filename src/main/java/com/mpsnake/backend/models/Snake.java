@@ -32,7 +32,7 @@ public class Snake {
         this.tail.clear();
     }
 
-    public synchronized void update(Collection<Snake> snakes) throws Exception {
+    public synchronized void updatePosition() {
         Location nextLocation = head.getAdjacentLocation(direction);
         if (nextLocation.x >= PlayfieldUtils.getPlayFieldWidth()) {
             nextLocation.x = 0;
@@ -50,35 +50,11 @@ public class Snake {
             tail.addFirst(head);
             head = nextLocation;
         }
-
-        handleCollisions(snakes);
-    }
-
-    private void handleCollisions(Collection<Snake> snakes) throws Exception {
-        for (Snake snake : snakes) {
-            boolean headCollision = id != snake.id && snake.getHead().equals(head);
-            boolean tailCollision = snake.getTail().contains(head);
-            if (headCollision || tailCollision) {
-                kill();
-                if (id != snake.id) {
-                    snake.reward();
-                }
-            }
-        }
-    }
-
-    private synchronized void kill() {
-        resetState();
-//        String message = "{'type': 'dead'}";
-//        messageTemplate.convertAndSend("topic/public", message);
-    }
-
-    private synchronized void reward() throws Exception {
-//        String message = "{'type': 'kill'}";
-//        messageTemplate.convertAndSend("topic/public", message);
     }
 
     public synchronized String getLocationJson() {
+
+
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("{\"x\": %d, \"y\": %d}",
                 Integer.valueOf(head.x), Integer.valueOf(head.y)));
@@ -89,6 +65,12 @@ public class Snake {
         }
         return String.format("{\"id\":\"%s\",\"body\":[%s]}",
                 String.valueOf(id), sb.toString());
+    }
+
+    public synchronized boolean checkCollisionWithOtherSnake(Snake snake) {
+        boolean headCollision = id != snake.id && snake.getHead().equals(head);
+        boolean tailCollision = snake.getTail().contains(head);
+        return headCollision || tailCollision;
     }
 
     public String getId() {
