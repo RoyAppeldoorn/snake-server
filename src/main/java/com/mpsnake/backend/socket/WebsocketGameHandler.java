@@ -1,8 +1,6 @@
-package com.mpsnake.backend;
+package com.mpsnake.backend.socket;
 
 import com.mpsnake.backend.interfaces.IGameLogic;
-import com.mpsnake.backend.models.Game;
-import com.mpsnake.backend.models.Snake;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,7 @@ import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 @Component
-public class GameHandler {
+public class WebsocketGameHandler {
 
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
@@ -21,7 +19,7 @@ public class GameHandler {
     @Autowired
     private IGameLogic gameLogic;
 
-    private final Log log = LogFactory.getLog(GameHandler.class);
+    private final Log log = LogFactory.getLog(WebsocketGameHandler.class);
 
     @EventListener
     private void handleWebSocketConnectListener(SessionConnectedEvent event) throws Exception {
@@ -33,11 +31,5 @@ public class GameHandler {
         String sessionId = event.getSessionId();
         gameLogic.removeSnake(sessionId);
     }
-
-    public void initGame() {
-        Game game = new Game();
-        Snake snake = new Snake()
-    }
-
 
 }

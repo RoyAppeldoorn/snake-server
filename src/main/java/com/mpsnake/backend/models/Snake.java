@@ -26,7 +26,7 @@ public class Snake {
         resetState();
     }
 
-    private void resetState() {
+    public void resetState() {
         this.direction = Direction.NONE;
         this.head = LocationUtils.getRandomLocation();
         this.tail.clear();
@@ -52,9 +52,20 @@ public class Snake {
         }
     }
 
+    public synchronized boolean checkCollisionWithOtherSnakes(Snake snake) {
+        for (Snake snake : snakes) {
+            boolean headCollision = id != snake.id && snake.getHead().equals(head);
+            boolean tailCollision = snake.getTail().contains(head);
+            if (headCollision || tailCollision) {
+                kill();
+                if (id != snake.id) {
+                    snake.reward();
+                }
+            }
+        }
+    }
+
     public synchronized String getLocationJson() {
-
-
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("{\"x\": %d, \"y\": %d}",
                 Integer.valueOf(head.x), Integer.valueOf(head.y)));
@@ -64,13 +75,7 @@ public class Snake {
                     Integer.valueOf(location.x), Integer.valueOf(location.y)));
         }
         return String.format("{\"id\":\"%s\",\"body\":[%s]}",
-                String.valueOf(id), sb.toString());
-    }
-
-    public synchronized boolean checkCollisionWithOtherSnake(Snake snake) {
-        boolean headCollision = id != snake.id && snake.getHead().equals(head);
-        boolean tailCollision = snake.getTail().contains(head);
-        return headCollision || tailCollision;
+                id, sb.toString());
     }
 
     public String getId() {

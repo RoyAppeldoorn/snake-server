@@ -1,7 +1,5 @@
 package com.mpsnake.backend.models;
 
-import com.mpsnake.backend.GameHandler;
-import com.mpsnake.backend.logic.GameLogic;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -35,6 +33,9 @@ public class Game {
 
     public void addPlayerToGame(Snake snake) {
         snakes.put(String.valueOf(snake.getId()), snake);
+        if(snakes.size() == 2) {
+            status = Status.IN_PROGRESS;
+        }
     }
 
     public void removePlayerFromGame(String id) {
@@ -61,5 +62,9 @@ public class Game {
 
     public Collection<Snake> getSnakes() {
         return Collections.unmodifiableCollection(snakes.values());
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }

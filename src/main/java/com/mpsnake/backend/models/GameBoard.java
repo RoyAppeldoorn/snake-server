@@ -13,14 +13,27 @@ public class GameBoard {
         this.playfieldWidth = 1100;
     }
 
-    public void updateSnakes(Collection<Snake> snakes) {
+    public void updateSnakes(Collection<Snake> snakes) throws Exception{
         for (Snake snake : snakes) {
             snake.updatePosition();
-            if(snake.checkCollisionWithOtherSnake(snake)) {
+            handleCollisions(snakes);
+        }
+    }
 
+    private void handleCollisions(Collection<Snake> snakes) throws Exception {
+        for (Snake snake : snakes) {
+            boolean headCollision = id != snake.id && snake.getHead().equals(head);
+            boolean tailCollision = snake.getTail().contains(head);
+            if (headCollision || tailCollision) {
+                kill();
+                if (id != snake.id) {
+                    snake.reward();
+                }
             }
         }
     }
+
+
 
     public void killSnake() {
 

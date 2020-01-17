@@ -5,14 +5,6 @@ public class Message {
     private String content;
     private String sender;
 
-    public enum MessageType {
-        JOIN,
-        UPDATE,
-        LEAVE,
-        KILL,
-        DEAD
-    }
-
     public MessageType getType() {
         return type;
     }

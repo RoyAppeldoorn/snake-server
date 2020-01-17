@@ -1,4 +1,4 @@
-package com.mpsnake.backend.logic;
+package com.mpsnake.backend.services;
 
 import com.mpsnake.backend.interfaces.IGameLogic;
 import com.mpsnake.backend.models.Direction;
@@ -13,9 +13,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class GameLogic implements IGameLogic {
+public class GameService implements IGameLogic {
 
-    private final Log log = LogFactory.getLog(GameLogic.class);
+    private final Log log = LogFactory.getLog(GameService.class);
 
     private Timer gameTimer = null;
 
@@ -54,7 +54,7 @@ public class GameLogic implements IGameLogic {
     }
 
     private void startTimer() {
-        gameTimer = new Timer(GameLogic.class.getSimpleName() + " Timer");
+        gameTimer = new Timer(GameService.class.getSimpleName() + " Timer");
         gameTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -78,7 +78,8 @@ public class GameLogic implements IGameLogic {
         for(Iterator<Snake> iterator = getSnakes().iterator();
             iterator.hasNext();) {
             Snake snake = iterator.next();
-            snake.update(getSnakes());
+            snake.updatePosition();
+            if(snake.checkCollisionWithOtherSnake(snake)) snake.resetState();
             sb.append(snake.getLocationJson());
             if (iterator.hasNext()) {
                 sb.append(',');
