@@ -1,13 +1,10 @@
-package com.mpsnake.backend.interfaces;
+package com.mpsnake.backend.logic;
 
 import com.mpsnake.backend.models.Direction;
 import com.mpsnake.backend.models.Snake;
 
 public interface IGameLogic {
-
-    void addSnake(Snake snake);
-
-    void removeSnake(String id);
-
+    void addPlayerToGame(Snake snake);
+    void removePlayerFromGame(String id);
     void setDirection(String id, Direction direction);
 }

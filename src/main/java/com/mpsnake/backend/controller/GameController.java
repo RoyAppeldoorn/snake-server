@@ -1,8 +1,9 @@
 package com.mpsnake.backend.controller;
 
-import com.mpsnake.backend.interfaces.IGameLogic;
+import com.mpsnake.backend.logic.IGameLogic;
 import com.mpsnake.backend.models.Direction;
 import com.mpsnake.backend.models.Snake;
+import com.mpsnake.backend.models.Message;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +22,16 @@ public class GameController {
 
     @MessageMapping("/update")
     @SendTo(value = "/topic/public")
-    public String broadcast(String msg) {
-        return msg;
+    public Message broadcast(Message message) {
+        return message;
     }
 
     @MessageMapping("/addUser")
     @SendTo(value = "/topic/public")
-    public void addUser(String username) {
+    public void addUser(Snake snake) {
         String sessionId = SimpAttributesContextHolder.currentAttributes().getSessionId();
-        Snake newSnake = new Snake(sessionId, username);
-        gameLogic.addSnake(newSnake);
+        Snake newSnake = new Snake(sessionId, snake.getUuid(), snake.getUsername());
+        gameLogic.addPlayerToGame(newSnake);
     }
 
     @MessageMapping("/setDirection")

@@ -1,6 +1,6 @@
 package com.mpsnake.backend.socket;
 
-import com.mpsnake.backend.interfaces.IGameLogic;
+import com.mpsnake.backend.logic.IGameLogic;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class WebsocketGameHandler {
     @EventListener
     private void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         String sessionId = event.getSessionId();
-        gameLogic.removeSnake(sessionId);
+        gameLogic.removePlayerFromGame(sessionId);
     }
 
 }
