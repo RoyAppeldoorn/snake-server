@@ -3,8 +3,6 @@ package com.mpsnake.backend.models;
 import com.mpsnake.backend.utils.PlayfieldUtils;
 import lombok.*;
 
-import java.util.Objects;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -17,13 +15,13 @@ public class Location {
     public Location getAdjacentLocation(Direction direction) {
         switch (direction) {
             case NORTH:
-                return new Location(x, y - PlayfieldUtils.getGridSize());
+                return new Location(x, y - PlayfieldUtils.GRID_SIZE);
             case SOUTH:
-                return new Location(x, y + PlayfieldUtils.getGridSize());
+                return new Location(x, y + PlayfieldUtils.GRID_SIZE);
             case EAST:
-                return new Location(x + PlayfieldUtils.getGridSize(), y);
+                return new Location(x + PlayfieldUtils.GRID_SIZE, y);
             case WEST:
-                return new Location(x - PlayfieldUtils.getGridSize(), y);
+                return new Location(x - PlayfieldUtils.GRID_SIZE, y);
             case NONE:
                 // fall through
             default:
