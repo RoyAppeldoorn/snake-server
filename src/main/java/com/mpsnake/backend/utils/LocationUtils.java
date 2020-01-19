@@ -2,11 +2,12 @@ package com.mpsnake.backend.utils;
 
 import com.mpsnake.backend.models.Location;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 public class LocationUtils {
 
-    private static final Random random = new Random();
+    private final static SecureRandom random = new SecureRandom();
 
     public static Location getRandomLocation() {
         int x = roundByGridSize(random.nextInt(PlayfieldUtils.PLAYFIELD_WIDTH));

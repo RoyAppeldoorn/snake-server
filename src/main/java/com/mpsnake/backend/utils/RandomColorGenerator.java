@@ -1,11 +1,12 @@
 package com.mpsnake.backend.utils;
 
 import java.awt.*;
+import java.security.SecureRandom;
 import java.util.Random;
 
 public class RandomColorGenerator {
 
-    private static final Random random = new Random();
+    private final static SecureRandom random = new SecureRandom(); // Compliant for security-sensitive use cases
 
     public static String getRandomHexColor() {
         float hue = random.nextFloat();
