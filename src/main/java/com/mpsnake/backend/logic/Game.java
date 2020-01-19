@@ -24,7 +24,7 @@ public class Game implements IGameLogic{
     private MessageDispatcher messageDispatcher;
 
     private static Timer gameTimer;
-    private final static long TICK_DELAY = 1000;
+    private static final long TICK_DELAY = 1000;
     private final ConcurrentHashMap<String, Snake> snakes;
     private int round;
 

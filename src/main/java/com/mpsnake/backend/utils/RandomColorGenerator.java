@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class RandomColorGenerator {
 
-    private final static SecureRandom random = new SecureRandom(); // Compliant for security-sensitive use cases
+    private static final SecureRandom random = new SecureRandom(); // Compliant for security-sensitive use cases
 
     public static String getRandomHexColor() {
         float hue = random.nextFloat();

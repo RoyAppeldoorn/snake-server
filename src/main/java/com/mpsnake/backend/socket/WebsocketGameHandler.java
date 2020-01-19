@@ -22,7 +22,7 @@ public class WebsocketGameHandler {
     private final Log log = LogFactory.getLog(WebsocketGameHandler.class);
 
     @EventListener
-    private void handleWebSocketConnectListener(SessionConnectedEvent event) throws Exception {
+    private void handleWebSocketConnectListener(SessionConnectedEvent event) {
         log.info("Successful connection");
     }
 
