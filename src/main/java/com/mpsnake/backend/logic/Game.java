@@ -7,8 +7,10 @@ import lombok.Getter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,11 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 public class Game implements IGameLogic{
 
-    @Autowired
-    private SimpMessageSendingOperations messageTemplate;
-
-    @Autowired
-    private MessageDispatcher messageDispatcher;
+    private final SimpMessageSendingOperations messageTemplate;
+    private final MessageDispatcher messageDispatcher;
 
     private static Timer gameTimer;
     private static final long TICK_DELAY = 1000;
@@ -31,7 +30,10 @@ public class Game implements IGameLogic{
     private final Log log = LogFactory.getLog(Game.class);
     private final Gson gson = new Gson();
 
-    public Game() {
+    @Autowired
+    public Game(MessageDispatcher messageDispatcher, SimpMessageSendingOperations messageTemplate) {
+        this.messageDispatcher = messageDispatcher;
+        this.messageTemplate = messageTemplate;
         this.gameTimer = new Timer();
         this.snakes = new ConcurrentHashMap<>();
         this.round = 0;
@@ -142,5 +144,11 @@ public class Game implements IGameLogic{
     private void resetTimer() {
         gameTimer.cancel();
         gameTimer = new Timer();
+    }
+
+    @EventListener
+    private void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
+        String sessionId = event.getSessionId();
+        removePlayerFromGame(sessionId);
     }
 }

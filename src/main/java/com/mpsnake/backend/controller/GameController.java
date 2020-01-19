@@ -17,8 +17,12 @@ public class GameController {
 
     private final Log log = LogFactory.getLog(GameController.class);
 
+    private final IGameLogic gameLogic;
+
     @Autowired
-    private IGameLogic gameLogic;
+    public GameController(IGameLogic gameLogic) {
+        this.gameLogic = gameLogic;
+    }
 
     @MessageMapping("/update")
     @SendTo(value = "/topic/public")
