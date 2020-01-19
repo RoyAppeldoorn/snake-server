@@ -22,8 +22,6 @@ public class Location {
                 return new Location(x + PlayfieldUtils.GRID_SIZE, y);
             case WEST:
                 return new Location(x - PlayfieldUtils.GRID_SIZE, y);
-            case NONE:
-                // fall through
             default:
                 return this;
         }

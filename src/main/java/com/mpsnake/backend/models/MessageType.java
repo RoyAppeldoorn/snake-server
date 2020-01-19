@@ -6,5 +6,6 @@ public enum MessageType {
     LEAVE,
     KILL,
     DEAD,
-    GAME_OVER
+    GAME_OVER,
+    ROUND_OVER
 }

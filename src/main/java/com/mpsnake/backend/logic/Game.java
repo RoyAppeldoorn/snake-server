@@ -3,6 +3,7 @@ package com.mpsnake.backend.logic;
 import com.google.gson.Gson;
 import com.mpsnake.backend.dispatcher.MessageDispatcher;
 import com.mpsnake.backend.models.*;
+import lombok.Getter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
+@Getter
 public class Game implements IGameLogic{
 
     @Autowired
@@ -29,7 +31,6 @@ public class Game implements IGameLogic{
     private final Log log = LogFactory.getLog(Game.class);
     private final Gson gson = new Gson();
 
-    @Autowired
     public Game() {
         this.gameTimer = new Timer();
         this.snakes = new ConcurrentHashMap<>();
@@ -82,6 +83,7 @@ public class Game implements IGameLogic{
                 clearFieldAfterRound();
             }
         }
+
     }
 
     private void dead(Snake snake) {
@@ -113,13 +115,15 @@ public class Game implements IGameLogic{
     }
 
     private void increaseRound() {
+        Message roundOverMessage = new Message(MessageType.ROUND_OVER, null);
+        messageDispatcher.dispatch(roundOverMessage);
+
         round++;
         if(round == 3) {
-            Message message = new Message(MessageType.GAME_OVER, null);
-            messageDispatcher.dispatch(message);
+            Message gameOverMessage = new Message(MessageType.GAME_OVER, null);
+            messageDispatcher.dispatch(gameOverMessage);
             endGame();
         }
-        log.info(round);
     }
 
     private void clearFieldAfterRound() {
