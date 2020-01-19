@@ -1,4 +1,4 @@
-package com.mpsnake.backend.config;
+package com.mpsnake.backend.socket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -16,6 +16,8 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
     }
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/gs-guide-websocket").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/snake")
+                .setAllowedOrigins("*")
+                .withSockJS();
     }
 }
