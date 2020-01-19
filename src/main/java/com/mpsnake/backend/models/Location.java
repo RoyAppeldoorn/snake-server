@@ -9,8 +9,8 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode
 public class Location {
-    public int x;
-    public int y;
+    private int x;
+    private int y;
 
     public Location getAdjacentLocation(Direction direction) {
         switch (direction) {
