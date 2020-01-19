@@ -22,6 +22,5 @@ install:
 
 script:
  # other script steps might be done before running the actual analysis
- - "./mvnw --show-version --errors --batch-mode -Prun-its clean verify"
  - mvn clean install sonar:sonar -Pcoverage -Dsonar.projectKey=RoyAppeldoorn_snake-server
 
