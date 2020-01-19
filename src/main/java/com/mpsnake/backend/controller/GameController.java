@@ -30,7 +30,7 @@ public class GameController {
     @SendTo(value = "/topic/public")
     public void addUser(Snake snake) {
         String sessionId = SimpAttributesContextHolder.currentAttributes().getSessionId();
-        Snake newSnake = new Snake(sessionId, snake.getUuid(), snake.getUsername());
+        Snake newSnake = new Snake(sessionId, snake.getUuid(), snake.getNickname());
         gameLogic.addPlayerToGame(newSnake);
     }
 
