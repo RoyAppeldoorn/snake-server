@@ -5,89 +5,58 @@ import com.mpsnake.backend.utils.PlayfieldUtils;
 import com.mpsnake.backend.utils.RandomColorGenerator;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
 import java.util.ArrayDeque;
-import java.util.Collection;
 import java.util.Deque;
 
 @Getter
+@Setter
 public class Snake {
 
     private Location head;
     private final Deque<Location> tail;
     private final String hexColor;
 
-    @Setter
+    private int points;
     private final String sessionId;
-    @Setter
     private final String uuid;
-    @Setter
-    private String username;
-    @Setter
+    private String nickname;
     private Direction direction;
 
-    public Snake(String sessionId, String uuid, String username) {
+    public Snake(String sessionId, String uuid, String nickname) {
         this.sessionId = sessionId;
         this.uuid = uuid;
-        this.username = username;
+        this.nickname = nickname;
         this.hexColor = RandomColorGenerator.getRandomHexColor();
         this.tail = new ArrayDeque<Location>();
+        this.points = 0;
         resetState();
     }
 
     public void resetState() {
         this.direction = Direction.NONE;
         this.head = LocationUtils.getRandomLocation();
+        this.points = 0;
         this.tail.clear();
     }
 
     public synchronized void updatePosition() {
         Location nextLocation = head.getAdjacentLocation(direction);
-        if (nextLocation.x >= PlayfieldUtils.getPlayFieldWidth()) {
+        if (nextLocation.x >= PlayfieldUtils.PLAYFIELD_WIDTH) {
             nextLocation.x = 0;
         }
-        if (nextLocation.y >= PlayfieldUtils.getPlayFieldHeight()) {
+        if (nextLocation.y >= PlayfieldUtils.PLAYFIELD_HEIGHT) {
             nextLocation.y = 0;
         }
         if (nextLocation.x < 0) {
-            nextLocation.x = PlayfieldUtils.getPlayFieldWidth();
+            nextLocation.x = PlayfieldUtils.PLAYFIELD_WIDTH;
         }
         if (nextLocation.y < 0) {
-            nextLocation.y = PlayfieldUtils.getPlayFieldHeight();
+            nextLocation.y = PlayfieldUtils.PLAYFIELD_HEIGHT;
         }
         if (direction != Direction.NONE) {
             tail.addFirst(head);
             head = nextLocation;
         }
     }
-
-//    public String getId() {
-//        return id;
-//    }
-//
-//    public String getUsername() {
-//        return username;
-//    }
-//
-//    public void setUsername(String username) {
-//        this.username = username;
-//    }
-//
-//    public String getHexColor() {
-//        return hexColor;
-//    }
-//
-//    public synchronized Location getHead() {
-//        return head;
-//    }
-//
-//    public synchronized Collection<Location> getTail() {
-//        return tail;
-//    }
-//
-//    public synchronized void setDirection(Direction direction) {
-//        this.direction = direction;
-//    }
 }
