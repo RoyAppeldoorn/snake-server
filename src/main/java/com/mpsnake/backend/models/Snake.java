@@ -42,17 +42,17 @@ public class Snake {
 
     public synchronized void updatePosition() {
         Location nextLocation = head.getAdjacentLocation(direction);
-        if (nextLocation.x >= PlayfieldUtils.PLAYFIELD_WIDTH) {
-            nextLocation.x = 0;
+        if (nextLocation.getX() >= PlayfieldUtils.PLAYFIELD_WIDTH) {
+            nextLocation.setX(0);
         }
-        if (nextLocation.y >= PlayfieldUtils.PLAYFIELD_HEIGHT) {
-            nextLocation.y = 0;
+        if (nextLocation.getY() >= PlayfieldUtils.PLAYFIELD_HEIGHT) {
+            nextLocation.setY(0);
         }
-        if (nextLocation.x < 0) {
-            nextLocation.x = PlayfieldUtils.PLAYFIELD_WIDTH;
+        if (nextLocation.getX() < 0) {
+            nextLocation.setX(PlayfieldUtils.PLAYFIELD_WIDTH);
         }
-        if (nextLocation.y < 0) {
-            nextLocation.y = PlayfieldUtils.PLAYFIELD_HEIGHT;
+        if (nextLocation.getY() < 0) {
+            nextLocation.setY(PlayfieldUtils.PLAYFIELD_HEIGHT);
         }
         if (direction != Direction.NONE) {
             tail.addFirst(head);
