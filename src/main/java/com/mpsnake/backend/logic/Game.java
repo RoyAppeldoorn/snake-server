@@ -56,7 +56,7 @@ public class Game implements IGameLogic{
             public void run() {
                 try {
                     updateSnakes(snakes);
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     log.error("Caught to prevent timer from shutting down", e);
                 }
             }
