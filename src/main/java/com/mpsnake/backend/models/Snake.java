@@ -28,7 +28,7 @@ public class Snake {
         this.uuid = uuid;
         this.nickname = nickname;
         this.hexColor = RandomColorGenerator.getRandomHexColor();
-        this.tail = new ArrayDeque<Location>();
+        this.tail = new ArrayDeque<>();
         this.points = 0;
         resetState();
     }
