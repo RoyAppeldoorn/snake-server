@@ -22,7 +22,7 @@ public class Game implements IGameLogic{
     private final SimpMessageSendingOperations messageTemplate;
     private final MessageDispatcher messageDispatcher;
 
-    private static Timer gameTimer;
+    private static Timer gameTimer = new Timer();
     private static final long TICK_DELAY = 1000;
     private final ConcurrentHashMap<String, Snake> snakes;
     private int round;
@@ -34,7 +34,6 @@ public class Game implements IGameLogic{
     public Game(MessageDispatcher messageDispatcher, SimpMessageSendingOperations messageTemplate) {
         this.messageDispatcher = messageDispatcher;
         this.messageTemplate = messageTemplate;
-        this.gameTimer = new Timer();
         this.snakes = new ConcurrentHashMap<>();
         this.round = 0;
     }
