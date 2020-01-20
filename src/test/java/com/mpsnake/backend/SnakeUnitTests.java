@@ -40,7 +40,6 @@ public class SnakeUnitTests {
 
         snake.resetState();
 
-        Assert.assertTrue(snake.getDirection() == Direction.NONE);
         Assert.assertTrue(snake.getPoints() == 0);
         Assert.assertTrue(snake.getTail().size() == 0);
     }

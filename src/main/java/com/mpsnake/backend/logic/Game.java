@@ -44,7 +44,7 @@ public class Game implements IGameLogic{
         Message message = new Message(MessageType.JOIN, gson.toJson(snakes.values()));
         messageDispatcher.dispatch(message);
 
-        if(snakes.size() == 2) {
+        if(snakes.size() == 1) {
             startGame();
         }
     }
@@ -68,6 +68,7 @@ public class Game implements IGameLogic{
             handleCollision(snake, snakes.values());
         }
         Message message = new Message(MessageType.UPDATE, gson.toJson(snakes.values()));
+        log.info(message.getContent());
         messageDispatcher.dispatch(message);
     }
 
@@ -79,25 +80,22 @@ public class Game implements IGameLogic{
                 if(!currentSnake.getSessionId().equals(snake.getSessionId())) {
                     increaseSnakePoint(snake);
                 } else {
-                    dead(currentSnake);
+                    dead(snake);
                 }
-                clearFieldAfterRound();
+                increaseRound();
             }
         }
-
     }
 
     private void dead(Snake snake) {
         Message message = new Message(MessageType.DEAD, gson.toJson(snake));
         messageDispatcher.dispatch(message);
-        increaseRound();
     }
 
     private void increaseSnakePoint(Snake snake) {
         snake.setPoints(snake.getPoints() + 1);
         Message message = new Message(MessageType.KILL, gson.toJson(snake));
         messageDispatcher.dispatch(message);
-        increaseRound();
     }
 
     public void removePlayerFromGame(String sessionId) {
@@ -116,31 +114,35 @@ public class Game implements IGameLogic{
     }
 
     private void increaseRound() {
-        Message roundOverMessage = new Message(MessageType.ROUND_OVER, null);
-        messageDispatcher.dispatch(roundOverMessage);
-
         round++;
-        if(round == 3) {
-            Message gameOverMessage = new Message(MessageType.GAME_OVER, null);
-            messageDispatcher.dispatch(gameOverMessage);
+        if(round < 3) {
+            Message roundOverMessage = new Message(MessageType.ROUND_OVER, null);
+            messageDispatcher.dispatch(roundOverMessage);
+            resetAllSnakes();
+        } else {
             endGame();
         }
     }
 
-    private void clearFieldAfterRound() {
+    private void resetAllSnakes() {
         for(Snake snake: snakes.values()) {
             snake.resetState();
         }
     }
 
     private void endGame() {
+        Message gameOverMessage = new Message(MessageType.GAME_OVER, null);
+        messageDispatcher.dispatch(gameOverMessage);
+
         for(Snake snake: snakes.values()) {
             removePlayerFromGame(snake.getSessionId());
         }
-        resetTimer();
+
+        resetGame();
     }
 
-    private void resetTimer() {
+    private void resetGame() {
+        round = 0;
         gameTimer.cancel();
         gameTimer = new Timer();
     }

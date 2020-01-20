@@ -9,6 +9,8 @@ import lombok.Setter;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import static com.mpsnake.backend.utils.RandomDirectionEnumGenerator.randomEnum;
+
 @Getter
 @Setter
 public class Snake {
@@ -27,6 +29,7 @@ public class Snake {
         this.sessionId = sessionId;
         this.uuid = uuid;
         this.nickname = nickname;
+        this.direction = randomEnum(Direction.class);
         this.hexColor = RandomColorGenerator.getRandomHexColor();
         this.tail = new ArrayDeque<>();
         this.points = 0;
@@ -34,9 +37,8 @@ public class Snake {
     }
 
     public void resetState() {
-        this.direction = Direction.NONE;
+        this.direction = randomEnum(Direction.class);
         this.head = LocationUtils.getRandomLocation();
-        this.points = 0;
         this.tail.clear();
     }
 
@@ -54,9 +56,7 @@ public class Snake {
         if (nextLocation.getY() < 0) {
             nextLocation.setY(PlayfieldUtils.PLAYFIELD_HEIGHT);
         }
-        if (direction != Direction.NONE) {
-            tail.addFirst(head);
-            head = nextLocation;
-        }
+        tail.addFirst(head);
+        head = nextLocation;
     }
 }

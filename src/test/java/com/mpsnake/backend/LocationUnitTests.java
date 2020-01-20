@@ -19,18 +19,5 @@ public class LocationUnitTests {
         // Assert
         Assert.assertTrue(newLocation.getX() == 120);
     }
-
-    @Test
-    public void getNewAdjacentLocationWithoutCorrectDirection() {
-        // Arrange
-        Location location = new Location(100, 100);
-
-        // Act
-        Direction direction = Direction.NONE;
-        Location newLocation = location.getAdjacentLocation(direction);
-
-        // Assert
-        Assert.assertEquals(location, newLocation);
-    }
     // </editor-fold>
 }
