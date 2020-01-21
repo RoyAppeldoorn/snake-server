@@ -24,8 +24,10 @@ public class Snake {
     private final String uuid;
     private String nickname;
     private Direction direction;
+    private Boolean roomMaster;
 
     public Snake(String sessionId, String uuid, String nickname) {
+        this.roomMaster = false;
         this.sessionId = sessionId;
         this.uuid = uuid;
         this.nickname = nickname;

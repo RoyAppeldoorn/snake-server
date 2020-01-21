@@ -7,4 +7,5 @@ public interface IGameLogic {
     void addPlayerToGame(Snake snake);
     void removePlayerFromGame(String id);
     void setDirection(String id, Direction direction);
+    void startGame();
 }

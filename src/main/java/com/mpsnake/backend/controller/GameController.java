@@ -38,6 +38,12 @@ public class GameController {
         gameLogic.addPlayerToGame(newSnake);
     }
 
+    @MessageMapping("/startGame")
+    @SendTo(value = "/topic/public")
+    public void startGame() {
+        gameLogic.startGame();
+    }
+
     @MessageMapping("/setDirection")
     public void handleDirectionChange(String dir) {
         String sessionId = SimpAttributesContextHolder.currentAttributes().getSessionId();

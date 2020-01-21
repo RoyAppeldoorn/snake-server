@@ -23,7 +23,7 @@ public class Game implements IGameLogic{
     private final MessageDispatcher messageDispatcher;
 
     private static Timer gameTimer = new Timer();
-    private static final long TICK_DELAY = 1000;
+    private static final long TICK_DELAY = 300;
     private final ConcurrentHashMap<String, Snake> snakes;
     private int round;
 
@@ -40,16 +40,15 @@ public class Game implements IGameLogic{
 
     public void addPlayerToGame(Snake snake) {
         snakes.put(snake.getSessionId(), snake);
-
+        if(snakes.size() == 1) {
+            snake.setRoomMaster(true);
+        }
         Message message = new Message(MessageType.JOIN, gson.toJson(snakes.values()));
         messageDispatcher.dispatch(message);
-
-        if(snakes.size() == 1) {
-            startGame();
-        }
     }
 
     public void startGame() {
+        resetGame();
         gameTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
