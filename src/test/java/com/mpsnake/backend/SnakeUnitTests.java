@@ -24,27 +24,6 @@ public class SnakeUnitTests {
     }
 
     @Test
-    public void resetSnakeState() {
-        // Arrange
-        Snake snake = new Snake("test", "test2", "test3");
-
-        // Act
-        snake.setDirection(Direction.EAST);
-        snake.setPoints(2);
-        snake.getTail().add(new Location(snake.getHead().getX() + 20, snake.getHead().getY()));
-
-        // Assert
-        Assert.assertTrue(snake.getDirection() == Direction.EAST);
-        Assert.assertTrue(snake.getPoints() == 2);
-        Assert.assertTrue(snake.getTail().size() == 1);
-
-        snake.resetState();
-
-        Assert.assertTrue(snake.getPoints() == 0);
-        Assert.assertTrue(snake.getTail().size() == 0);
-    }
-
-    @Test
     public void updateSnakePosition() {
         // Arrange
         Snake snake = new Snake("test", "test2", "test3");
