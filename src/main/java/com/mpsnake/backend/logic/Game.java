@@ -80,8 +80,17 @@ public class Game implements IGameLogic{
                     increaseSnakePoint(snake);
                 } else {
                     dead(snake);
+                    givePointsToOtherSnakes(currentSnake, snakes);
                 }
                 increaseRound();
+            }
+        }
+    }
+
+    private void givePointsToOtherSnakes(Snake snake, Collection<Snake> snakes) {
+        for(Snake s: snakes) {
+            if(!s.getSessionId().equals(snake.getSessionId())) {
+                increaseSnakePoint(s);
             }
         }
     }
@@ -90,6 +99,8 @@ public class Game implements IGameLogic{
         Message message = new Message(MessageType.DEAD, gson.toJson(snake));
         messageDispatcher.dispatch(message);
     }
+
+
 
     private void increaseSnakePoint(Snake snake) {
         snake.setPoints(snake.getPoints() + 1);

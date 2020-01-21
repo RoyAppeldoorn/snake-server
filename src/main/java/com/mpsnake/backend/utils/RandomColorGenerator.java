@@ -12,7 +12,7 @@ public class RandomColorGenerator {
         float hue = random.nextFloat();
         // sat between 0.1 and 0.3
         float saturation = (random.nextInt(2000) + 1000) / 10000f;
-        float luminance = 0.9f;
+        float luminance = 2.5f;
         Color color = Color.getHSBColor(hue, saturation, luminance);
         return '#' + Integer.toHexString(
                 (color.getRGB() & 0xffffff) | 0x1000000).substring(1);
